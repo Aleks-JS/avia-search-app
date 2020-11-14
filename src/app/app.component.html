@@ -1,8 +1,37 @@
 <div class="wrapper">
-  <header class="header">header</header>
+  <header class="header">
+    <div class="header__content container">header</div>
+
+  </header>
   <main class="page">
-    <aside class="page">aside</aside>
-    <div class="page__content">content</div>
+    <div class="page__container container">
+      <aside class="page__aside">
+        <div class="page__menu menu-page">
+          <div class="menu-page__sort">
+            <h3 class="menu-title">Сортировать</h3>
+            <input type="radio" name="sort" id="Ascending">
+            <label for="Ascending">По возрастанию</label>
+          </div>
+
+          <div class="menu-page__filter">
+            <h3 class="menu-title">Фильтровать</h3>
+          </div>
+
+          <div class="menu-page__price">
+            <h3 class="menu-title">Цена</h3>
+          </div>
+
+          <div class="menu-page__airlines">
+            <h3 class="menu-title">Авиакомпании</h3>
+          </div>
+        </div>
+      </aside>
+      <div class="page__content">content</div>
+    </div>
+
   </main>
-  <footer class="footer"></footer>
+  <footer class="footer">
+    <div class="footer__container container">footer </div>
+
+  </footer>
 </div>

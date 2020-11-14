@@ -3,10 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { RadioItemComponent } from './radio-item/radio-item.component';
+import { CheckboxItemComponent } from './checkbox-item/checkbox-item.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RadioItemComponent,
+    CheckboxItemComponent
   ],
   imports: [
     BrowserModule,
