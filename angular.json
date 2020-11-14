@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "avia-search-app"
+    }
+  },
+  "defaultProject": "avia-search-app",
+  "cli": {
+    "analytics": false
+  }
 }
