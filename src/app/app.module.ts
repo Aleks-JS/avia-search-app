@@ -1,20 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RadioItemComponent } from './radio-item/radio-item.component';
-import { CheckboxItemComponent } from './checkbox-item/checkbox-item.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlightCardComponent } from './components/flight-card/flight-card.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    RadioItemComponent,
-    CheckboxItemComponent
+    FlightCardComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
