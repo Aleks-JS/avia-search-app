@@ -53,17 +53,14 @@ export class AppComponent implements OnInit {
     transferFilter: new FormControl('withoutTransfers'),
   });
 
+  dataFlight$ = this.httpService.getData()
 
-  dataFlight$ = new Subject()
 
   constructor(private httpService: HttpService) { }
 
 
   ngOnInit(): void {
-    this.dataFlight$.next(this.httpService.getData())
-    this.dataFlight$.pipe(
-      tap(console.log)
-    )
+    this.dataFlight$.subscribe(e => console.log(e))
   }
 
   counter() {
