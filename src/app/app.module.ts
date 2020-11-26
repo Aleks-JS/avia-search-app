@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlightCardComponent } from './components/flight-card/flight-card.component';
+import { FiltersComponent } from './components/filters/filters.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    FlightCardComponent
+    FlightCardComponent,
+    FiltersComponent
   ],
   imports: [
     BrowserModule,

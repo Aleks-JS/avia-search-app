@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.httpService.getData().subscribe(data => this.dataFlight$.next(data['result']['flights']))
+    this.dataFlight$.next(this.httpService.getData())
     this.dataFlight$.pipe(
       tap(console.log)
     )
