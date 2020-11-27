@@ -1,32 +1,37 @@
 <aside class="page__aside">
-  <form class="page__menu menu-page">
+  <form [formGroup]="filtersForm" class="page__menu menu-page">
     <div class="menu-page__sort">
       <div class="menu-page__sort">
         <h3 class="menu-title">Сортировать</h3>
-        <input type="radio" name="priceSort" id="scending" value="scending" checked data-sort="minprice" />
+        <input formControlName="priceSort" type="radio" name="priceSort" id="scending" value="scending" checked
+          data-sort="minprice" />
         <label for="scending">По возрастанию</label><br />
-        <input type="radio" name="priceSort" id="descending" value="descending" data-sort="maxprice" />
+        <input formControlName="priceSort" type="radio" name="priceSort" id="descending" value="descending"
+          data-sort="maxprice" />
         <label for="descending">По убыванию</label><br />
-        <input type="radio" name="priceSort" id="duration" value="onway" data-sort="duration" />
+        <input formControlName="priceSort" type="radio" name="priceSort" id="duration" value="onway"
+          data-sort="duration" />
         <label for="duration">По времени в пути</label><br />
       </div>
 
       <div class="menu-page__filter">
         <h3 class="menu-title">Фильтровать</h3>
-        <input type="checkbox" name="transferFilter" id="withoutTransfers" value="withoutTransfers"
-          data-sort="onesegment" />
+        <input formControlName="transferFilter" type="checkbox" name="transferFilter" id="withoutTransfers"
+          value="withoutTransfers" data-sort="onesegment" />
         <label for="withoutTransfers">Без пересадок</label><br />
-        <input type="checkbox" name="transferFilter" id="oneTransfers" value="oneTransfers" data-sort="twosegment" />
+        <input formControlName="transferFilter" type="checkbox" name="transferFilter" id="oneTransfers"
+          value="oneTransfers" data-sort="twosegment" />
         <label for="oneTransfers">Одна пересадка</label>
       </div>
 
       <div class="menu-page__price">
         <h3 class="menu-title">Цена</h3>
         <p>
-          От<input type="text" name="min" value="0" pattern="^[ 0-9]+$" data-sort="mincost" />
+          От<input formControlName="minCost" type="text" name="min" value="0" pattern="^[ 0-9]+$" data-sort="mincost" />
         </p>
         <p>
-          До<input type="text" name="max" value="100000" pattern="^[ 0-9]+$" data-sort="maxcost" />
+          До<input formControlName="maxCost" type="text" name="max" value="100000" pattern="^[ 0-9]+$"
+            data-sort="maxcost" />
         </p>
       </div>
 

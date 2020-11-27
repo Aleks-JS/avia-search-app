@@ -1,10 +1,7 @@
 export interface Filters {
-    minprice: string,
-    maxprice: string,
-    duration: string,
-    onesegment: string,
-    twosegment: string,
-    mincost: number,
-    maxcost: number,
+    priceSort: string,
+    transferFilter: string,
+    minCost: number,
+    maxCost: number,
     airlines: string
 }
