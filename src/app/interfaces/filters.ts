@@ -1,5 +1,7 @@
+export enum priceSort { max = 'max', min = 'min', duration = 'duration' }
+
 export interface Filters {
-    priceSort: string,
+    priceSort: priceSort,
     transferFilter: string,
     minCost: number,
     maxCost: number,

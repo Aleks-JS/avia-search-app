@@ -3,18 +3,22 @@
     <div class="menu-page__sort">
       <div class="menu-page__sort">
         <h3 class="menu-title">Сортировать</h3>
-        <input formControlName="priceSort" type="radio" name="priceSort" id="scending" value="scending" checked
-          data-sort="minprice" />
+        <div class="menu-page__sort items" *ngFor="let elem of priceSortItems; let i = index">
+          <input formControlName="sort" [value]="elem.attribute" type="radio" [id]="elem.value"
+            data-sort="minprice" /><label [for]="elem.value">{{ elem.display }}</label><br />
+        </div>
+        <!-- <input formControlName="priceSort" type="radio" name="priceSort" id="scending" value="scending" checked
+          data-sort="elem.attribute" />
         <label for="scending">По возрастанию</label><br />
         <input formControlName="priceSort" type="radio" name="priceSort" id="descending" value="descending"
-          data-sort="maxprice" />
+          data-sort="elem.attribute" />
         <label for="descending">По убыванию</label><br />
         <input formControlName="priceSort" type="radio" name="priceSort" id="duration" value="onway"
-          data-sort="duration" />
-        <label for="duration">По времени в пути</label><br />
+          data-sort="elem.attribute" />
+        <label for="duration">По времени в пути</label><br /> -->
       </div>
 
-      <div class="menu-page__filter">
+      <!-- <div class="menu-page__filter">
         <h3 class="menu-title">Фильтровать</h3>
         <input formControlName="transferFilter" type="checkbox" name="transferFilter" id="withoutTransfers"
           value="withoutTransfers" data-sort="onesegment" />
@@ -33,7 +37,7 @@
           До<input formControlName="maxCost" type="text" name="max" value="100000" pattern="^[ 0-9]+$"
             data-sort="maxcost" />
         </p>
-      </div>
+      </div> -->
 
       <div class="menu-page__airlines">
         <h3 class="menu-title">Авиакомпании</h3>
