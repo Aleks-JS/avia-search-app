@@ -45,14 +45,6 @@ export class AppComponent implements OnInit {
 
   countCard$ = new BehaviorSubject(initNumbersOfCards)
 
-  formSort = new FormGroup({
-    priceSort: new FormControl("scending"),
-  });
-
-  formFilter = new FormGroup({
-    transferFilter: new FormControl('withoutTransfers'),
-  });
-
   dataFlight$ = this.httpService.getData()
 
 

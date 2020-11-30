@@ -1,43 +1,29 @@
 <aside class="page__aside">
   <form [formGroup]="filtersForm" class="page__menu menu-page">
     <div class="menu-page__sort">
-      <div class="menu-page__sort">
-        <h3 class="menu-title">Сортировать</h3>
-        <div class="menu-page__sort items" *ngFor="let elem of priceSortItems; let i = index">
-          <input formControlName="sort" [value]="elem.attribute" type="radio" [id]="elem.value"
-            data-sort="minprice" /><label [for]="elem.value">{{ elem.display }}</label><br />
-        </div>
-        <!-- <input formControlName="priceSort" type="radio" name="priceSort" id="scending" value="scending" checked
-          data-sort="elem.attribute" />
-        <label for="scending">По возрастанию</label><br />
-        <input formControlName="priceSort" type="radio" name="priceSort" id="descending" value="descending"
-          data-sort="elem.attribute" />
-        <label for="descending">По убыванию</label><br />
-        <input formControlName="priceSort" type="radio" name="priceSort" id="duration" value="onway"
-          data-sort="elem.attribute" />
-        <label for="duration">По времени в пути</label><br /> -->
+      <h3 class="menu-title">Сортировать</h3>
+      <div class="menu-page__sort items" *ngFor="let elem of priceSortItems; let i = index">
+        <input formControlName="sort" [value]="elem.attribute" type="radio" [id]="elem.value" /><label
+          [for]="elem.value"> {{ elem.display }}</label><br />
       </div>
 
-      <!-- <div class="menu-page__filter">
+      <div class="menu-page__filter">
         <h3 class="menu-title">Фильтровать</h3>
-        <input formControlName="transferFilter" type="checkbox" name="transferFilter" id="withoutTransfers"
-          value="withoutTransfers" data-sort="onesegment" />
-        <label for="withoutTransfers">Без пересадок</label><br />
-        <input formControlName="transferFilter" type="checkbox" name="transferFilter" id="oneTransfers"
-          value="oneTransfers" data-sort="twosegment" />
-        <label for="oneTransfers">Одна пересадка</label>
+        <div class="menu-page__filter items" *ngFor="let elem of transplantsFilterItems; let i = index">
+          <input formControlName="transferFilter" type="checkbox" [value]="elem.attribute" [id]="elem.value" />
+          <label [for]="elem.value"> {{ elem.display }}</label><br />
+        </div>
       </div>
 
       <div class="menu-page__price">
         <h3 class="menu-title">Цена</h3>
         <p>
-          От<input formControlName="minCost" type="text" name="min" value="0" pattern="^[ 0-9]+$" data-sort="mincost" />
+          От <input formControlName="minCost" type="text" />
         </p>
         <p>
-          До<input formControlName="maxCost" type="text" name="max" value="100000" pattern="^[ 0-9]+$"
-            data-sort="maxcost" />
+          До <input formControlName="maxCost" type="text" />
         </p>
-      </div> -->
+      </div>
 
       <div class="menu-page__airlines">
         <h3 class="menu-title">Авиакомпании</h3>
