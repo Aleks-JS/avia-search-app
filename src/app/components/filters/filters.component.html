@@ -38,10 +38,26 @@
         <p>До <input formControlName="maxCost" type="text" /></p>
       </div>
 
-      <div class="menu-page__airlines">
+      <div
+        class="menu-page__airlines"
+        *ngIf="carriers$ | async as listAirlines"
+      >
         <h3 class="menu-title">Авиакомпании</h3>
+        <div
+          class="menu-page__filter items"
+          *ngFor="let elem of listAirlines; let i = index"
+        >
+          <input
+            formControlName="airlines"
+            type="checkbox"
+            [value]="elem.carrier"
+            [id]="elem.carrierUid"
+          />
+          <label [for]="elem.carrierUid"> {{ elem.carrier }}</label
+          ><br />
+        </div>
       </div>
     </div>
-    <div class="test">{{ carriers$ | async }}</div>
+    <div class="test"></div>
   </form>
 </aside>

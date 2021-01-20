@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Flight } from './../interfaces/flight';
+import { Carriers } from './../interfaces/carriers';
 
 @Injectable()
 export class HttpService {
@@ -11,13 +12,17 @@ export class HttpService {
   getData() {
     return this.http
       .get('assets/flights.json')
-      .pipe(map((val) => val['result'].flights.map((e) => e.flight)));
+      .pipe(
+        map((val) =>
+          val['result'].flights.map((e: { flight: any }) => e.flight)
+        )
+      );
   }
 
   getFlights(): Observable<Flight[]> {
     return this.http.get('assets/flights.json').pipe(
       map((val) =>
-        val['result'].flights.map((e) => {
+        val['result'].flights.map((e: { flight: any }) => {
           const fl = e.flight;
           const firstSegmentThere = fl.legs[0].segments[0];
           const lastSegmentThere =
@@ -26,7 +31,8 @@ export class HttpService {
 
           const lastSegmentBack =
             fl.legs[1].segments[fl.legs[1].segments.length - 1];
-          return {
+
+          const data = {
             carrier: fl.carrier.caption,
             carrierUid: fl.carrier.uid,
             totalPrice: fl.price.total.amount,
@@ -137,6 +143,7 @@ export class HttpService {
             durationClassListBack:
               fl.legs[1].segments.length - 1 < 1 ? 'hide' : 'show',
           };
+          return data;
         })
       )
     );
@@ -146,12 +153,18 @@ export class HttpService {
     return this.http.get('assets/flights.json').pipe(
       map((val) => {
         const cost = {};
-        const allPrices = val['result'].flights.map((e) =>
+        const allPrices = val[
+          'result'
+        ].flights.map((e: { flight: { price: { total: { amount: any } } } }) =>
           Number(e.flight.price.total.amount)
         );
 
-        cost['max'] = allPrices.reduce((a, b) => Math.max(a, b));
-        cost['min'] = allPrices.reduce((a, b) => Math.min(a, b));
+        cost['max'] = allPrices.reduce((a: number, b: number) =>
+          Math.max(a, b)
+        );
+        cost['min'] = allPrices.reduce((a: number, b: number) =>
+          Math.min(a, b)
+        );
 
         return cost;
       })
@@ -160,11 +173,27 @@ export class HttpService {
 
   getCarriers() {
     return this.http.get('assets/flights.json').pipe(
-      map((val) => {
-        const carriers = val['result'].flights.map(
-          (e) => e.flight.carrier.caption
-        );
-        return [...new Set([...carriers])];
+      map((flight) => {
+        const carriersSet: Set<string> = new Set();
+
+        return flight['result'].flights
+          .map(
+            (e: { flight: { carrier: { caption: string; uid: string } } }) => {
+              const carr: string = e.flight.carrier.caption;
+              const uid: string = e.flight.carrier.uid;
+              if (!carriersSet.has(carr)) {
+                carriersSet.add(carr);
+
+                const carrier: Carriers = {
+                  carrier: carr,
+                  carrierUid: uid,
+                };
+
+                return carrier;
+              }
+            }
+          )
+          .filter((elem) => elem !== undefined);
       })
     );
   }

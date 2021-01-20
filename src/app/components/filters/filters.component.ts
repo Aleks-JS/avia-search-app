@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   filter,
   map,
@@ -9,7 +9,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { HttpService } from './../../services/http.service';
-import { priceSort, transferFilter } from './../../interfaces/filters';
+import { Filters, priceSort, transferFilter } from './../../interfaces/filters';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 
 const PRICE_SORT_ITEMS = [
@@ -44,27 +44,32 @@ export class FiltersComponent implements OnInit, OnDestroy {
   priceSortItems = PRICE_SORT_ITEMS;
   transplantsFilterItems = TRANSPLANTS_FILTER_ITEMS;
 
+  refresh$ = new Subject();
   prices$ = this.httpService.getPrice();
-  carriers$ = this.httpService.getCarriers();
+  carriers$ = this.refresh$.pipe(
+    startWith(true),
+    switchMap(() => this.httpService.getCarriers()),
+    tap(console.log)
+  );
 
-  filtersForm = this.fb.group({
+  filtersForm: FormGroup = this.fb.group({
     sort: [this.priceSortItems[0].attribute],
     transferFilter: this.transplantsFilterItems,
     minCost: '',
     maxCost: '',
+    airlines: '',
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService) {}
 
   ngOnInit(): void {
-    this.httpService.getData().subscribe((e) => console.log(e));
     this.prices$.subscribe((cost: object) => {
       this.filtersForm.patchValue({
         minCost: cost['min'],
         maxCost: cost['max'],
       });
     });
-    this.carriers$.subscribe((e) => console.log(e));
+    // this.carriers$.subscribe((e) => console.log(e));
   }
 
   ngOnDestroy(): void {}
