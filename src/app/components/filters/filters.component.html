@@ -2,32 +2,46 @@
   <form [formGroup]="filtersForm" class="page__menu menu-page">
     <div class="menu-page__sort">
       <h3 class="menu-title">Сортировать</h3>
-      <div class="menu-page__sort items" *ngFor="let elem of priceSortItems; let i = index">
-        <input formControlName="sort" [value]="elem.attribute" type="radio" [id]="elem.value" /><label
-          [for]="elem.value"> {{ elem.display }}</label><br />
+      <div
+        class="menu-page__sort items"
+        *ngFor="let elem of priceSortItems; let i = index"
+      >
+        <input
+          formControlName="sort"
+          [value]="elem.attribute"
+          type="radio"
+          [id]="elem.value"
+        /><label [for]="elem.value"> {{ elem.display }}</label
+        ><br />
       </div>
 
       <div class="menu-page__filter">
         <h3 class="menu-title">Фильтровать</h3>
-        <div class="menu-page__filter items" *ngFor="let elem of transplantsFilterItems; let i = index">
-          <input formControlName="transferFilter" type="checkbox" [value]="elem.attribute" [id]="elem.value" />
-          <label [for]="elem.value"> {{ elem.display }}</label><br />
+        <div
+          class="menu-page__filter items"
+          *ngFor="let elem of transplantsFilterItems; let i = index"
+        >
+          <input
+            formControlName="transferFilter"
+            type="checkbox"
+            [value]="elem.attribute"
+            [id]="elem.value"
+          />
+          <label [for]="elem.value"> {{ elem.display }}</label
+          ><br />
         </div>
       </div>
 
       <div class="menu-page__price">
         <h3 class="menu-title">Цена</h3>
-        <p>
-          От <input formControlName="minCost" type="text" />
-        </p>
-        <p>
-          До <input formControlName="maxCost" type="text" />
-        </p>
+        <p>От <input formControlName="minCost" type="text" /></p>
+        <p>До <input formControlName="maxCost" type="text" /></p>
       </div>
 
       <div class="menu-page__airlines">
         <h3 class="menu-title">Авиакомпании</h3>
       </div>
     </div>
+    <div class="test">{{ carriers$ | async }}</div>
   </form>
 </aside>

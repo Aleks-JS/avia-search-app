@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subject, BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  shareReplay,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { HttpService } from './services/http.service';
 
 // const priceSortItems = [
@@ -29,7 +36,7 @@ import { HttpService } from './services/http.service';
 //   },
 // ];
 
-const initNumbersOfCards: number = 2
+const initNumbersOfCards: number = 2;
 
 @Component({
   selector: 'app-root',
@@ -43,21 +50,17 @@ export class AppComponent implements OnInit {
   // defaultPriceItem = priceSortItems[0].item;
   // defaultTransferItem = transferFilterItems[0].item;
 
-  countCard$ = new BehaviorSubject(initNumbersOfCards)
+  countCard$ = new BehaviorSubject(initNumbersOfCards);
 
-  dataFlight$ = this.httpService.getData()
+  dataFlight$ = this.httpService.getData();
 
-
-  constructor(private httpService: HttpService) { }
-
+  constructor(private httpService: HttpService) {}
 
   ngOnInit(): void {
-    this.dataFlight$.subscribe(e => console.log(e))
+    // this.dataFlight$.subscribe(e => console.log(e))
   }
 
   counter() {
-    this.countCard$.next(this.countCard$.value + 1)
+    this.countCard$.next(this.countCard$.value + 1);
   }
-
-
 }
