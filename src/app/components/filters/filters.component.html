@@ -34,7 +34,10 @@
 
       <div class="menu-page__price">
         <h3 class="menu-title">Цена</h3>
-        <p>От <input formControlName="minCost" type="text" /></p>
+        <p>
+          От
+          <input formControlName="minCost" type="text" />
+        </p>
         <p>До <input formControlName="maxCost" type="text" /></p>
       </div>
 
@@ -50,10 +53,10 @@
           <input
             formControlName="airlines"
             type="checkbox"
-            [value]="elem.carrier"
-            [id]="elem.carrierUid"
+            [value]="elem[1]"
+            [id]="elem[0]"
           />
-          <label [for]="elem.carrierUid"> {{ elem.carrier }}</label
+          <label [for]="elem[0]"> {{ elem[1] }}</label
           ><br />
         </div>
       </div>

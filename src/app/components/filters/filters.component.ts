@@ -1,8 +1,11 @@
+import { DataService } from './../../services/data.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   filter,
   map,
+  max,
+  min,
   shareReplay,
   startWith,
   switchMap,
@@ -10,7 +13,7 @@ import {
 } from 'rxjs/operators';
 import { HttpService } from './../../services/http.service';
 import { Filters, priceSort, transferFilter } from './../../interfaces/filters';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, of, from } from 'rxjs';
 
 const PRICE_SORT_ITEMS = [
   { value: 'scending', display: 'По возрастанию', attribute: priceSort.min },
@@ -39,17 +42,24 @@ const TRANSPLANTS_FILTER_ITEMS = [
   selector: 'app-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
+  providers: [HttpService, DataService],
 })
 export class FiltersComponent implements OnInit, OnDestroy {
   priceSortItems = PRICE_SORT_ITEMS;
   transplantsFilterItems = TRANSPLANTS_FILTER_ITEMS;
 
   refresh$ = new Subject();
-  prices$ = this.httpService.getPrice();
+
+  prices$ = this.refresh$.pipe(
+    startWith(true),
+    switchMap(() => this.dataService.getPrice()),
+    shareReplay(1)
+  );
+
   carriers$ = this.refresh$.pipe(
     startWith(true),
-    switchMap(() => this.httpService.getCarriers()),
-    tap(console.log)
+    switchMap(() => this.dataService.getCarriers()),
+    shareReplay(1)
   );
 
   filtersForm: FormGroup = this.fb.group({
@@ -60,16 +70,26 @@ export class FiltersComponent implements OnInit, OnDestroy {
     airlines: '',
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) {}
+  constructor(
+    private fb: FormBuilder,
+    private httpService: HttpService,
+    private dataService: DataService
+  ) {}
 
   ngOnInit(): void {
-    this.prices$.subscribe((cost: object) => {
+    this.prices$.subscribe((cost) => {
       this.filtersForm.patchValue({
         minCost: cost['min'],
         maxCost: cost['max'],
       });
     });
-    // this.carriers$.subscribe((e) => console.log(e));
+    // this.dataService
+    //   .getPrice()
+    //   .pipe(tap(console.log), max(), tap(console.log))
+    //   .subscribe((x) => console.log(x));
+    // this.prices$.subscribe((e) => console.log(e));
+    // this.httpService.getData().subscribe((e) => console.log(e));
+    // this.prices$.subscribe((e) => console.log(e));
   }
 
   ngOnDestroy(): void {}
