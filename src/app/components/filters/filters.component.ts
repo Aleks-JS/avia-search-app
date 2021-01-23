@@ -9,6 +9,7 @@ import {
   shareReplay,
   startWith,
   switchMap,
+  takeUntil,
   tap,
 } from 'rxjs/operators';
 import { HttpService } from './../../services/http.service';
@@ -48,7 +49,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
   priceSortItems = PRICE_SORT_ITEMS;
   transplantsFilterItems = TRANSPLANTS_FILTER_ITEMS;
 
-  refresh$ = new Subject();
+  private refresh$ = new Subject();
+  private destroy$ = new Subject();
 
   prices$ = this.refresh$.pipe(
     startWith(true),
@@ -64,11 +66,21 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filtersForm: FormGroup = this.fb.group({
     sort: [this.priceSortItems[0].attribute],
-    transferFilter: this.transplantsFilterItems,
-    minCost: '',
-    maxCost: '',
-    airlines: '',
+    transferFilter: [null],
+    minCost: [null],
+    maxCost: [null],
+    airlines: [null],
   });
+
+  resultValueFilter$ = this.filtersForm.valueChanges.pipe(
+    startWith({
+      sort: null,
+      transferFilter: null,
+      minCost: null,
+      maxCost: null,
+      airlines: null,
+    })
+  );
 
   constructor(
     private fb: FormBuilder,
@@ -77,7 +89,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.prices$.subscribe((cost) => {
+    this.prices$.pipe(takeUntil(this.destroy$)).subscribe((cost) => {
       this.filtersForm.patchValue({
         minCost: cost['min'],
         maxCost: cost['max'],
@@ -92,5 +104,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
     // this.prices$.subscribe((e) => console.log(e));
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

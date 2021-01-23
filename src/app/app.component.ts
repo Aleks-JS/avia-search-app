@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subject, BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import {
@@ -53,6 +53,8 @@ export class AppComponent implements OnInit {
   countCard$ = new BehaviorSubject(initNumbersOfCards);
 
   dataFlight$ = this.httpService.getData();
+
+  @ViewChild('btnNextFlight') btnNextFlight: ElementRef;
 
   constructor(private httpService: HttpService) {}
 
