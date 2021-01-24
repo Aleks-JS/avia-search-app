@@ -2,33 +2,18 @@
   <form [formGroup]="filtersForm" class="page__menu menu-page">
     <div class="menu-page__sort">
       <h3 class="menu-title">Сортировать</h3>
-      <div
-        class="menu-page__sort items"
-        *ngFor="let elem of priceSortItems; let i = index"
-      >
-        <input
-          formControlName="sort"
-          [value]="elem.attribute"
-          type="radio"
-          [id]="elem.value"
-        /><label [for]="elem.value"> {{ elem.display }}</label
-        ><br />
+      <div class="menu-page__sort items" *ngFor="let elem of priceSortItems; let i = index">
+        <input formControlName="sort" [value]="elem.attribute" type="radio" [id]="elem.value" /><label
+          [for]="elem.value"> {{ elem.display }}</label><br />
       </div>
 
-      <div class="menu-page__filter">
+      <div class="menu-page__filter" formArrayName="transferFilter">
         <h3 class="menu-title">Фильтровать</h3>
-        <div
-          class="menu-page__filter items"
-          *ngFor="let elem of transplantsFilterItems; let i = index"
-        >
-          <input
-            formControlName="transferFilter"
-            type="checkbox"
-            [value]="elem.attribute"
-            [id]="elem.value"
-          />
-          <label [for]="elem.value"> {{ elem.display }}</label
-          ><br />
+        <div class="menu-page__filter items" *ngFor="let elem of transferFilterArray.controls; let i = index"
+          [formGroup]="elem">
+          <input type="checkbox" [formControl]="elem.get('selected')" [value]="elem.get('value').value"
+            [id]="elem.get('value').value" />
+          <label [for]="elem.get('value').value"> {{ elem.get('display').value }}</label><br />
         </div>
       </div>
 
@@ -41,23 +26,11 @@
         <p>До <input formControlName="maxCost" type="text" /></p>
       </div>
 
-      <div
-        class="menu-page__airlines"
-        *ngIf="carriers$ | async as listAirlines"
-      >
+      <div class="menu-page__airlines" *ngIf="carriers$ | async as listAirlines">
         <h3 class="menu-title">Авиакомпании</h3>
-        <div
-          class="menu-page__filter items"
-          *ngFor="let elem of listAirlines; let i = index"
-        >
-          <input
-            formControlName="airlines"
-            type="checkbox"
-            [value]="elem[1]"
-            [id]="elem[0]"
-          />
-          <label [for]="elem[0]"> {{ elem[1] }}</label
-          ><br />
+        <div class="menu-page__filter items" *ngFor="let elem of listAirlines; let i = index">
+          <input formControlName="airlines" type="checkbox" [(value)]="elem[1]" [id]="elem[0]" />
+          <label [for]="elem[0]"> {{ elem[1] }}</label><br />
         </div>
       </div>
     </div>
