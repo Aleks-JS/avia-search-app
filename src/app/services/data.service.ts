@@ -1,7 +1,7 @@
 import { Filters, priceSort } from './../interfaces/filters';
 import { Injectable } from '@angular/core';
-import { map, max, tap } from 'rxjs/operators';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { Flight } from '../interfaces/flight';
 
@@ -148,7 +148,7 @@ export class DataService {
         flight.map((val) => {
           carrier[val['carrierUid']] = val['carrier'];
         });
-        return Object.entries(carrier);
+        return carrier;
       })
     );
   }

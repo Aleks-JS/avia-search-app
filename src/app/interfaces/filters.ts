@@ -13,9 +13,10 @@ export enum transferFilterItemDisplay {
   oneTransplant = 'Одна пересадка',
 }
 
-export enum airlinesFilter {
-  carrier = 'carrier',
-  carrierUid = 'carrierUid',
+export interface airlinesFilter {
+  value: string;
+  display: string;
+  selected: boolean;
 }
 
 export interface transferFilter {
@@ -25,7 +26,7 @@ export interface transferFilter {
 }
 
 export interface Filters {
-  priceSort: priceSort;
+  sort: priceSort;
   transferFilter: transferFilter;
   minCost: number;
   maxCost: number;

@@ -1,6 +1,6 @@
 <aside class="page__aside">
-  <form [formGroup]="filtersForm" class="page__menu menu-page">
-    <div class="menu-page__sort">
+  <form *ngIf="dataReadiness" [formGroup]="filtersForm" class="page__menu menu-page">
+    <div class="menu-page__sort" *ngIf='priceSortItems'>
       <h3 class="menu-title">Сортировать</h3>
       <div class="menu-page__sort items" *ngFor="let elem of priceSortItems; let i = index">
         <input formControlName="sort" [value]="elem.attribute" type="radio" [id]="elem.value" /><label
@@ -26,14 +26,16 @@
         <p>До <input formControlName="maxCost" type="text" /></p>
       </div>
 
-      <div class="menu-page__airlines" *ngIf="carriers$ | async as listAirlines">
+      <div class="menu-page__airlines" formArrayName="airlines">
         <h3 class="menu-title">Авиакомпании</h3>
-        <div class="menu-page__filter items" *ngFor="let elem of listAirlines; let i = index">
-          <input formControlName="airlines" type="checkbox" [(value)]="elem[1]" [id]="elem[0]" />
-          <label [for]="elem[0]"> {{ elem[1] }}</label><br />
+        <div class="menu-page__filter items" *ngFor="let elem of carrierFilterArray.controls; let i = index"
+          [formGroup]="elem">
+          <input type="checkbox" [formControl]="elem.get('selected')" [value]="elem.get('value').value"
+            [id]="elem.get('value').value" />
+          <label [for]="elem.get('value').value"> {{ elem.get('display').value }}</label><br />
         </div>
       </div>
+      <pre></pre>
     </div>
-    <div class="test"></div>
   </form>
 </aside>

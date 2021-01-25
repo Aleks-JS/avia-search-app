@@ -33,21 +33,6 @@ const PRICE_SORT_ITEMS = [
   },
 ];
 
-// const TRANSPLANTS_FILTER_ITEMS = [
-//   {
-//     value: transferFilterItemValue,
-//     display: 'Без пересадок',
-//     attribute: transferFilterItemValue.withoutTransfers,
-//     selected: false,
-//   },
-//   {
-//     value: transferFilterItemValue,
-//     display: 'Одна пересадка',
-//     attribute: transferFilterItemValue.oneTransplant,
-//     selected: false,
-//   },
-// ];
-
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
@@ -56,19 +41,22 @@ const PRICE_SORT_ITEMS = [
 })
 export class FiltersComponent implements OnInit, OnDestroy {
   priceSortItems = PRICE_SORT_ITEMS;
-  // transplantsFilterItems = TRANSPLANTS_FILTER_ITEMS;
 
   private refresh$ = new Subject();
   private destroy$ = new Subject();
+  private filtersForm: FormGroup;
+
   public availableTransferValue = [...Object.values(transferFilterItemValue)];
   public availableTransferDisplay = [
     ...Object.values(transferFilterItemDisplay),
   ];
 
-  private mapToCheckboxArrayGroup(
-    data: string[],
-    display: string[]
-  ): FormArray {
+  dataReadiness: boolean = false;
+
+  public availableCarrierValue: string[];
+  public availableCarrierDisplay: string[];
+
+  private mapToCheckboxArrayGroup(data: string[], display): FormArray {
     return this.fb.array(
       data.map((val, i) => {
         return this.fb.group({
@@ -80,41 +68,57 @@ export class FiltersComponent implements OnInit, OnDestroy {
     );
   }
 
-  get transferFilterArray() {
-    return this.filtersForm.get('transferFilter') as FormArray;
-  }
-
-  filtersForm: FormGroup = this.fb.group({
-    sort: [this.priceSortItems[0].attribute],
-    transferFilter: this.mapToCheckboxArrayGroup(
-      this.availableTransferValue,
-      this.availableTransferDisplay
-    ),
-    minCost: [null],
-    maxCost: [null],
-    airlines: [null],
-  });
-
   prices$ = this.refresh$.pipe(
     startWith(true),
     switchMap(() => this.dataService.getPrice()),
-    shareReplay(1)
+    shareReplay(1),
+    map((cost) => {
+      const price = {
+        minCost: cost['min'],
+        maxCost: cost['max'],
+      };
+      return price;
+    })
   );
 
   carriers$ = this.refresh$.pipe(
     startWith(true),
     switchMap(() => this.dataService.getCarriers()),
+    map((e) => {
+      const keys = [...Object.keys(e)];
+      const values = [...Object.values(e)];
+      const form = (this.filtersForm = this.fb.group({
+        sort: [this.priceSortItems[0].attribute],
+        transferFilter: this.mapToCheckboxArrayGroup(
+          this.availableTransferValue,
+          this.availableTransferDisplay
+        ),
+        minCost: [null],
+        maxCost: [null],
+        airlines: this.mapToCheckboxArrayGroup(keys, values),
+      }));
+      this.dataReadiness = true;
+      return form;
+    }),
     shareReplay(1)
   );
 
-  filterData$ = this.refresh$.pipe(
-    startWith(this.filtersForm.value),
-    switchMap(() => this.filtersForm.valueChanges),
-    map((e) => {
-      console.log(e);
-      console.log(this.filtersForm.controls);
+  dataFilter$ = combineLatest([this.prices$, this.carriers$]).pipe(
+    map(([price, filter]) => {
+      filter.patchValue(price);
+      return filter;
     })
   );
+  get transferFilterArray() {
+    // console.log('transferFilterArray');
+    return this.filtersForm.get('transferFilter') as FormArray;
+  }
+
+  get carrierFilterArray() {
+    const carriers = this.filtersForm.get('airlines') as FormArray;
+    // console.log('carrierFilterArray');
+    return carriers;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -124,45 +128,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.prices$.pipe(takeUntil(this.destroy$)).subscribe((cost) => {
-      this.filtersForm.patchValue({
-        minCost: cost['min'],
-        maxCost: cost['max'],
-      });
-    });
-
-    this.filterData$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e) => console.log(e));
-
-    console.log(this.filtersForm.controls.transferFilter);
-    // this.dataService
-    //   .getPrice()
-    //   .pipe(tap(console.log), max(), tap(console.log))
-    //   .subscribe((x) => console.log(x));
-    // this.prices$.subscribe((e) => console.log(e));
-    // this.httpService.getData().subscribe((e) => console.log(e));
-    // this.prices$.subscribe((e) => console.log(e));
+    this.dataFilter$.pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  onCheckboxChange(e) {
-    console.log(e.target.value);
-    // const formArr: FormArray = this.filtersForm.get(
-    //   'transferFilter'
-    // ) as FormArray;
-
-    // if (e.target.checked) {
-    //   formArr.push(new FormControl(e.target.value));
-    // } else {
-    //   const index = formArr.controls.findIndex(
-    //     (x) => x.value === e.target.value
-    //   );
-    //   formArr.removeAt(index);
-    // }
   }
 }
